@@ -7,7 +7,7 @@ L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
 
 // Loading and ploting coordinates
 var markers = L.markerClusterGroup();
-fetch('../data/mapdata.json')
+fetch('./data/mapdata.json')
     .then(response => response.json())
     .then(data => {
         data.forEach(coord => {
@@ -23,7 +23,7 @@ function updateMap() {
     var selectedYear = document.getElementById('yearFilter').value;
     var selectedRegion = document.getElementById('regionFilter').value;
     markers.clearLayers();
-    fetch('../data/mapdata.json')
+    fetch('./data/mapdata.json')
         .then(response => response.json())
         .then(data => {
             data.forEach(coord => {
