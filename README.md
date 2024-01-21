@@ -1,5 +1,6 @@
 # UCF Data Sci Bootcamp - Project 3<br>
-https://yenorii.github.io/project-3/<br>
+Github Pages Deployment: https://yenorii.github.io/project-3/<br>
+Google Slides Presentation: https://docs.google.com/presentation/d/1vSSgH-y3kt97PluuIDCKEvdZXuDs4CAww9wghWoIMbc/edit?usp=sharing<br>
 
 ## Info:<br>
 Our project revolves around analyzing accident data to gain insights into specific regional patterns. The primary focus is on dividing the accident data by different regions and conducting in-depth analysis within each area.<br>
