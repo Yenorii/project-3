@@ -1,0 +1,117 @@
+{
+ "cells": [
+  {
+   "cell_type": "code",
+   "execution_count": 7,
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stderr",
+     "output_type": "stream",
+     "text": [
+      "/var/folders/cz/_pyz_5qn69155q4_bc51whp00000gn/T/ipykernel_23381/3351979959.py:41: DtypeWarning: Columns (40,42) have mixed types. Specify dtype option on import or set low_memory=False.\n",
+      "  df_2019 = clean_dataframe(pd.read_csv('../data/accident2019.csv', encoding='ISO-8859-1'))\n"
+     ]
+    }
+   ],
+   "source": [
+    "# Importing modules\n",
+    "import pandas as pd\n",
+    "import sqlite3\n",
+    "\n",
+    "state_to_region = {\n",
+    "    'Maryland': 'South', 'Delaware': 'South', 'District of Columbia': 'South', 'West Virginia': 'South', 'Virginia': 'South',\n",
+    "    'Kentucky': 'South', 'Tennessee': 'South', 'North Carolina': 'South', 'South Carolina': 'South', 'Georgia': 'South',\n",
+    "    'Florida': 'South', 'Alabama': 'South', 'Mississippi': 'South', 'Louisiana': 'South', 'Arkansas': 'South',\n",
+    "    'Oklahoma': 'South', 'Texas': 'South', 'Montana': 'West', 'Idaho': 'West', 'Washington': 'West',\n",
+    "    'Oregon': 'West', 'California': 'West', 'Nevada': 'West', 'New Mexico': 'West', 'Arizona': 'West',\n",
+    "    'Utah': 'West', 'Colorado': 'West', 'Wyoming': 'West', 'Alaska': 'West', 'Hawaii': 'West',\n",
+    "    'Pennsylvania': 'Northeast', 'New Jersey': 'Northeast', 'New York': 'Northeast', 'New Hampshire': 'Northeast',\n",
+    "    'Vermont': 'Northeast', 'Rhode Island': 'Northeast', 'Massachusetts': 'Northeast', 'Maine': 'Northeast',\n",
+    "    'Connecticut': 'Northeast', 'Ohio': 'Midwest', 'Indiana': 'Midwest', 'Illinois': 'Midwest',\n",
+    "    'Michigan': 'Midwest', 'Wisconsin': 'Midwest', 'Minnesota': 'Midwest', 'North Dakota': 'Midwest',\n",
+    "    'South Dakota': 'Midwest', 'Nebraska': 'Midwest', 'Iowa': 'Midwest', 'Missouri': 'Midwest', 'Kansas': 'Midwest'\n",
+    "}\n",
+    "# Define a function to map values\n",
+    "def reorganize_lgt_cond(value):\n",
+    "    if value in [1, 4]:\n",
+    "        return 'Day'\n",
+    "    elif value in [2, 3, 5, 6]:\n",
+    "        return 'Night'\n",
+    "    else:\n",
+    "        return 'Unknown'  # Handle any other values if needed\n",
+    "# Apply the function to the 'LGT_COND' column in all DataFrames\n",
+    "df_2021['LGT_COND'] = df_2021['LGT_COND'].apply(reorganize_lgt_cond)\n",
+    "df_2020['LGT_COND'] = df_2020['LGT_COND'].apply(reorganize_lgt_cond)\n",
+    "df_2019['LGT_COND'] = df_2019['LGT_COND'].apply(reorganize_lgt_cond)\n",
+    "# Cleaning the DataFrame\n",
+    "def clean_dataframe(dataframe):\n",
+    "    columnstoremove = ['ST_CASE', 'COUNTY', 'CITY', 'CITYNAME', 'DAYNAME', \n",
+    "                       'HOURNAME', 'MINUTENAME', 'TWAY_ID2', 'MILEPTNAME', \n",
+    "                       'NHSNAME', 'SP_JURNAME', 'RELJCT1', 'RELJCT1NAME', \n",
+    "                       'RELJCT2', 'RELJCT2NAME', 'ARR_HOURNAME', 'ARR_MINNAME', \n",
+    "                       'LATITUDENAME', 'LONGITUDNAME']\n",
+    "    \n",
+    "    cleaned_df = dataframe.drop(columnstoremove, axis=1)\n",
+    "    # Add REGION and REGIONNAME columns\n",
+    "    cleaned_df['REGION'] = cleaned_df['STATENAME'].map(state_to_region)\n",
+    "    cleaned_df['REGIONNAME'] = cleaned_df['REGION']\n",
+    "    return cleaned_df\n",
+    "# Loading and cleaning CSVs\n",
+    "df_2021 = clean_dataframe(pd.read_csv('../data/accident2021.csv', encoding='ISO-8859-1'))\n",
+    "df_2020 = clean_dataframe(pd.read_csv('../data/accident2020.csv', encoding='ISO-8859-1'))\n",
+    "df_2019 = clean_dataframe(pd.read_csv('../data/accident2019.csv', encoding='ISO-8859-1'))\n",
+    "\n",
+    "# Concatenating the dataframes\n",
+    "all_years_df = pd.concat([df_2021, df_2020, df_2019])\n",
+    "\n",
+    "# Renaming colums \n",
+    "all_years_df = all_years_df.rename(columns={'ROUTENAME': 'ROADTYPE',\n",
+    "                               'RUR_URBNAME': 'POPULATION',\n",
+    "                               'HARM_EVNAME': 'ACCIDENTTYPE',\n",
+    "                               'TYP_INTNAME': 'INTERSECTIONTYPE',\n",
+    "                               'REL_ROADNAME': 'LOCATION',\n",
+    "                               'LGT_CONDNAME': 'LIGHTING',\n",
+    "                               'WEATHERNAME': 'WEATHERTYPE',\n",
+    "                               'NOT_HOURNAME': 'TIME'})\n",
+    "\n",
+    "# Connecting to the SQLite database\n",
+    "conn = sqlite3.connect('../data/accident_database.db')\n",
+    "all_years_df.to_sql('accidents', conn, if_exists='replace', index=False)\n",
+    "# Query to select data needed for map\n",
+    "mapquery = \"SELECT LATITUDE, LONGITUD, YEAR, REGION, POPULATION, LOCATION from accidents\"\n",
+    "mapdf = pd.read_sql_query(mapquery, conn)\n",
+    "# Exporting to JSON\n",
+    "mapdf.to_json('../data/mapdata.json', orient='records')\n",
+    "# Query to select data needed for Day/Night Chart\n",
+    "daynightquery = \"SELECT YEAR, REGION, LGT_COND from accidents\"\n",
+    "daynightdf = pd.read_sql_query(daynightquery, conn)\n",
+    "# Exporting to JSON\n",
+    "daynightdf.to_json('../data/daynight.json', orient='records')\n",
+    "# Closing connection\n",
+    "conn.close()"
+   ]
+  }
+ ],
+ "metadata": {
+  "kernelspec": {
+   "display_name": "base",
+   "language": "python",
+   "name": "python3"
+  },
+  "language_info": {
+   "codemirror_mode": {
+    "name": "ipython",
+    "version": 3
+   },
+   "file_extension": ".py",
+   "mimetype": "text/x-python",
+   "name": "python",
+   "nbconvert_exporter": "python",
+   "pygments_lexer": "ipython3",
+   "version": "3.11.5"
+  }
+ },
+ "nbformat": 4,
+ "nbformat_minor": 2
+}
