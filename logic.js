@@ -18,7 +18,9 @@ fetch('./data/mapdata.json')
         });
         map.addLayer(markers);
     })
-    .catch(error => console.error('Error loading JSON:', error));
+
+// Initial map update
+updateMap();
 
 // Adding filters
 function updateMap() {
@@ -61,8 +63,11 @@ function checkFilters(coord, selectedYear, selectedRegion, selectedPopulation, s
     return true;
 }
 
-// Initial map update
-updateMap();
+// Event listeners
+document.getElementById('yearFilter').addEventListener('change', updateMap);
+document.getElementById('regionFilter').addEventListener('change', updateMap);
+document.getElementById('PopulationFilter').addEventListener('change', updateMap);
+document.getElementById('LocationFilter').addEventListener('change', updateMap);
 
 // Create a function to update the day/night chart
 function updateDayNightChart() {
@@ -120,18 +125,18 @@ function updateDayNightChart() {
                     },
                     plugins: {
                         legend: {
-                            display: true, // Set to true to display the legend
-                            position: 'top', // You can change the position if needed
+                            display: true,
+                            position: 'top',
                             labels: {
                                 generateLabels: function (chart) {
                                     return [{
                                         text: 'Daylight/Lit Conditions',
-                                        fillStyle: 'blue', // Match the color used for daytime
-                                        hidden: false, // Set to false to show this label
+                                        fillStyle: 'blue',
+                                        hidden: false, 
                                     }, {
                                         text: 'Night/Dark Conditions',
-                                        fillStyle: 'black', // Match the color used for nighttime
-                                        hidden: false, // Set to false to show this label
+                                        fillStyle: 'black',
+                                        hidden: false, 
                                     }];
                                 },
                             },
@@ -140,7 +145,7 @@ function updateDayNightChart() {
                 }
             });
         })
-        .catch(error => console.error('Error loading JSON:', error));
+.catch(error => console.error('Error loading JSON:', error));
 }
 
 // Call the function to initialize the chart
@@ -211,7 +216,7 @@ function updateYearlyChart() {
                         y: {
                             beginAtZero: true,
                             ticks: {
-                                stepSize: 1000 // Adjust as needed
+                                stepSize: 1000
                             }
                         }
                     },
