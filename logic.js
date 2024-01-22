@@ -11,7 +11,7 @@ fetch('./data/mapdata.json')
     .then(response => response.json())
     .then(data => {
         data.forEach(coord => {
-            var marker = L.marker([coord.LATITUDE, coord.LONGITUDE]);
+            var marker = L.marker([coord.LATITUDE, coord.LONGITUD]);
             markers.addLayer(marker);
         });
         map.addLayer(markers);
@@ -31,7 +31,7 @@ function updateMap() {
         .then(data => {
             data.forEach(coord => {
                 if (checkFilters(coord, selectedYear, selectedRegion, selectedPopulation, selectedLocation)) {
-                    var marker = L.marker([coord.LATITUDE, coord.LONGITUDE]);
+                    var marker = L.marker([coord.LATITUDE, coord.LONGITUD]);
                     markers.addLayer(marker);
                 }
             });
