@@ -91,10 +91,10 @@ function updateDayNightChart() {
 
             // Define colors for the clusters
             var backgroundColors = labels.map(condition => {
-                if (condition === 'Day') {
-                    return 'lightblue'; // Daytime color
-                } else if (condition === 'Night') {
-                    return 'navy'; // Nighttime color
+                if (condition === 'Night/Dark Condtiions') {
+                    return 'black'; // Daytime color
+                } else if (condition === 'Daylight/Lit Conditions') {
+                    return 'blue'; // Nighttime color
                 }
             });
 
