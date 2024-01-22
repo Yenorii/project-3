@@ -22,7 +22,6 @@ fetch('./data/mapdata.json')
 function updateMap() {
     var selectedYear = document.getElementById('yearFilter').value;
     var selectedRegion = document.getElementById('regionFilter').value;
-    var selectedRoadType = document.getElementById('RoadTypeFilter').value;
     var selectedPopulation = document.getElementById('PopulationFilter').value;
     var selectedLocation = document.getElementById('LocationFilter').value;
     markers.clearLayers();
