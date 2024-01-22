@@ -1,0 +1,17 @@
+body {
+    font-family: Arial, sans-serif;
+}
+
+#map {
+    height: 400px; /* Adjust as needed */
+}
+
+#myChart {
+    max-width: 600px; /* Adjust as needed */
+    margin: auto;
+}
+
+.filter-container {
+    text-align: center;
+    margin-bottom: 20px;
+}
