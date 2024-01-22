@@ -91,10 +91,10 @@ function updateDayNightChart() {
 
             // Define colors for the clusters
             var backgroundColors = labels.map(condition => {
-                if (condition === 'Night/Dark Condtiions') {
-                    return 'black'; // Daytime color
+                if (condition === 'Night/Dark Conditions') {
+                    return 'black'; // Nighttime color
                 } else if (condition === 'Daylight/Lit Conditions') {
-                    return 'blue'; // Nighttime color
+                    return 'blue'; // Daytime color
                 }
             });
 
@@ -126,3 +126,82 @@ function updateDayNightChart() {
 
 // Call the function to initialize the chart
 updateDayNightChart();
+
+// Sample JSON data with only years
+const jsonData = [
+    { YEAR: 2019 },
+    { YEAR: 2020 },
+    { YEAR: 2019 },
+    { YEAR: 2021 },
+    { YEAR: 2020 },
+    // ... more data
+  ];
+  
+  // Count occurrences of each year (total accidents per year)
+  const yearCounts = jsonData.reduce((counts, entry) => {
+    const year = entry.YEAR.toString(); // Convert to string
+    counts[year] = (counts[year] || 0) + 1;
+    return counts;
+  }, {});
+  
+  console.log(yearCounts);
+
+// Function to create or update the yearly accidents chart
+function updateYearlyChart() {
+    var yearlyCtx = document.getElementById('yearlyChart').getContext('2d');
+
+    // Fetch and load the JSON data from yearlyaccidents.json file
+    fetch('./data/yearlyaccidents.json')
+        .then(response => response.json())
+        .then(data => {
+            // Count occurrences of each year (total accidents per year)
+            const yearCounts = data.reduce((counts, entry) => {
+                const year = entry.YEAR.toString(); // Convert to string
+                counts[year] = (counts[year] || 0) + 1;
+                return counts;
+            }, {});
+
+            // Prepare data for chart
+            var labels = Object.keys(yearCounts);
+            var accidentCounts = Object.values(yearCounts);
+
+            // Define colors based on accident counts
+            var backgroundColors = accidentCounts.map(count => {
+                if (count === Math.max(...accidentCounts)) {
+                    return 'red'; // Highest count in red
+                } else if (count === Math.min(...accidentCounts)) {
+                    return 'pink'; // Lowest count in pink
+                } else {
+                    return 'orange'; // Medium count in orange
+                }
+            });
+
+            var yearlyChart = new Chart(yearlyCtx, {
+                type: 'bar',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'Accidents',
+                        data: accidentCounts,
+                        backgroundColor: backgroundColors,
+                        borderColor: 'rgba(255, 99, 132, 1)',
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: {
+                                stepSize: 1000 // Adjust as needed
+                            }
+                        }
+                    }
+                }
+            });
+        })
+        .catch(error => console.error('Error loading JSON:', error));
+}
+
+// Call the function to initialize the chart
+updateYearlyChart();
