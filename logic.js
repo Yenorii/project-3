@@ -71,35 +71,55 @@ document.getElementById('PopulationFilter').addEventListener('change', updateMap
 document.getElementById('LocationFilter').addEventListener('change', updateMap);
 
 // Create a function to update the day/night chart
-function updateDayNightChart(dayData, nightData) {
+function updateDayNightChart() {
     var ctx = document.getElementById('myChart').getContext('2d');
-    var myChart = new Chart(ctx, {
-        type: 'bar',
-        data: {
-            labels: ['South', 'West', 'Northeast', 'Midwest'],
-            datasets: [{
-                label: 'Day',
-                data: dayData,
-                backgroundColor: 'paleyellow',
-                borderColor: 'paleyellow',
-                borderWidth: 1
-            }, {
-                label: 'Night',
-                data: nightData,
-                backgroundColor: 'navy',
-                borderColor: 'navy',
-                borderWidth: 1
-            }]
-        },
-        options: {
-            scales: {
-                y: {
-                    beginAtZero: true
+    
+    // Fetch and load the JSON data from your daynight.json file
+    fetch('./daynight.json')
+        .then(response => response.json())
+        .then(data => {
+            // Initialize an object to store the totals for each lighting condition
+            var lightingTotals = {};
+
+            // Loop through the data and calculate totals
+            data.forEach(entry => {
+                var lightingCondition = entry.LGT_COND;
+                if (!lightingTotals[lightingCondition]) {
+                    lightingTotals[lightingCondition] = 1;
+                } else {
+                    lightingTotals[lightingCondition]++;
                 }
-            }
-        }
-    });
+            });
+
+            // Prepare data for chart
+            var labels = Object.keys(lightingTotals);
+            var dataValues = Object.values(lightingTotals);
+
+            var myChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        data: dataValues,
+                        backgroundColor: 'yellow',
+                        borderColor: 'yellow',
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: {
+                                stepSize: 1
+                            }
+                        }
+                    }
+                }
+            });
+        })
+        .catch(error => console.error('Error loading JSON:', error));
 }
 
 // Call the function to initialize the chart
-updateDayNightChart([1, 4], [2, 3, 5, 6]);
+updateDayNightChart();

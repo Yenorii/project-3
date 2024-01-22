@@ -1,29 +1,28 @@
 body {
     font-family: Arial, sans-serif;
-    }
-    
+}
+
 .container {
     display: flex;
     flex-direction: row;
     justify-content: space-between;
     align-items: center;
-  }
-  
-    #map {
-    height: 400px; 
-    width: 50%; 
-    }
+}
 
-    #myChart {
-    height: 400px; 
-    max-width: 600px;
-    margin: auto;
-    display: block; 
+#map {
+    height: 400px;
+    width: 50%;
 }
 
 .filter-container {
     display: flex;
-    flex-direction: row;
-    justify-content: space-between;
+    flex-direction: column;
     align-items: center;
+}
+
+#myChart {
+    height: 400px;
+    max-width: 600px;
+    margin: auto;
+    display: block;
 }
