@@ -75,3 +75,31 @@ document.getElementById('yearFilter').addEventListener('change', updateMap);
 document.getElementById('regionFilter').addEventListener('change', updateMap);
 document.getElementById('PopulationFilter').addEventListener('change', updateMap);
 document.getElementById('LocationFilter').addEventListener('change', updateMap);
+
+var ctx = document.getElementById('myChart').getContext('2d');
+var myChart = new Chart(ctx, {
+    type: 'bar',
+    data: {
+        labels: ['South', 'West', 'Northeast', 'Midwest'],
+        datasets: [{
+            label: 'Day',
+            data: [1, 4],
+            backgroundColor: 'paleyellow',
+            borderColor: 'paleyellow',
+            borderWidth: 1
+        }, {
+            label: 'Night',
+            data: [2, 3, 5, 6],
+            backgroundColor: 'navy',
+            borderColor: 'navy',
+            borderWidth: 1
+        }]
+    },
+    options: {
+        scales: {
+            y: {
+                beginAtZero: true
+            }
+        }
+    }
+});
