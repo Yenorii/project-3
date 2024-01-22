@@ -3,12 +3,15 @@ body {
 }
 
 #map {
-    height: 400px; /* Adjust as needed */
+    height: 400px; 
+    width: 50%; 
 }
 
 #myChart {
-    max-width: 600px; /* Adjust as needed */
+    height: 400px; 
+    max-width: 600px;
     margin: auto;
+    display: block; 
 }
 
 .filter-container {

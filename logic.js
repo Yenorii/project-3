@@ -11,8 +11,10 @@ fetch('./data/mapdata.json')
     .then(response => response.json())
     .then(data => {
         data.forEach(coord => {
-            var marker = L.marker([coord.LATITUDE, coord.LONGITUD]);
-            markers.addLayer(marker);
+            if (coord.LATITUDE !== undefined && coord.LONGITUD !== undefined) {
+                var marker = L.marker([coord.LATITUDE, coord.LONGITUD]);
+                markers.addLayer(marker);
+            }
         });
         map.addLayer(markers);
     })
@@ -30,7 +32,7 @@ function updateMap() {
         .then(data => {
             data.forEach(coord => {
                 if (checkFilters(coord, selectedYear, selectedRegion, selectedPopulation, selectedLocation)) {
-                    var marker = L.marker([coord.LATITUDE, coord.LONGITUD]);
+                    var marker = L.marker([coord.LATITUDE, coord.LONGITUDE]);
                     markers.addLayer(marker);
                 }
             });
@@ -41,60 +43,29 @@ function updateMap() {
 
 function checkFilters(coord, selectedYear, selectedRegion, selectedPopulation, selectedLocation) {
     var filterCriteria = [];
-
     if (selectedYear !== 'all') {
         filterCriteria.push(parseInt(coord.YEAR) === parseInt(selectedYear));
     }
-
     if (selectedPopulation !== 'all') {
         filterCriteria.push(coord.POPULATION === selectedPopulation);
     }
-
     if (selectedLocation !== 'all') {
         filterCriteria.push(coord.LOCATION === selectedLocation);
     }
-
     if (selectedRegion !== 'all') {
         filterCriteria.push(coord.REGION === selectedRegion);
     }
-
     if (filterCriteria.length > 0) {
         return filterCriteria.every(condition => condition);
     }
     return true;
 }
+
+// Initial map update
 updateMap();
 
-// Event listeners
+// Event listeners for filters
 document.getElementById('yearFilter').addEventListener('change', updateMap);
 document.getElementById('regionFilter').addEventListener('change', updateMap);
 document.getElementById('PopulationFilter').addEventListener('change', updateMap);
 document.getElementById('LocationFilter').addEventListener('change', updateMap);
-
-var ctx = document.getElementById('myChart').getContext('2d');
-var myChart = new Chart(ctx, {
-    type: 'bar',
-    data: {
-        labels: ['South', 'West', 'Northeast', 'Midwest'],
-        datasets: [{
-            label: 'Day',
-            data: [1, 4],
-            backgroundColor: 'paleyellow',
-            borderColor: 'paleyellow',
-            borderWidth: 1
-        }, {
-            label: 'Night',
-            data: [2, 3, 5, 6],
-            backgroundColor: 'navy',
-            borderColor: 'navy',
-            borderWidth: 1
-        }]
-    },
-    options: {
-        scales: {
-            y: {
-                beginAtZero: true
-            }
-        }
-    }
-});
