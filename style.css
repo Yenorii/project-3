@@ -22,9 +22,15 @@ body {
 }
 
 #myChart, #yearlyChart {
-    height: 200px; 
-    max-width: 100%; 
-    margin: 10px auto; 
+    height: 400px;
+    max-width: 600px;
+    margin: auto;
     display: block;
 }
 
+#PopBarChart {
+    height: 400px;
+    max-width: 600px;
+    margin: auto;
+    display: block;
+}
