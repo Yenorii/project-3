@@ -85,41 +85,70 @@ function updateDayNightChart() {
             data.forEach(entry => {
                 var lightingCondition = entry.LGT_COND;
                 if (!lightingTotals[lightingCondition]) {
-                    lightingTotals[lightingCondition] = 1;
-                } else {
-                    lightingTotals[lightingCondition]++;
+                    lightingTotals[lightingCondition] = 1, 4;
+                } else if (condition === '2','3','5','6') {
+                    return 'navy'
                 }
             });
-
-            // Prepare data for chart
-            var labels = Object.keys(lightingTotals);
-            var dataValues = Object.values(lightingTotals);
-
-            var myChart = new Chart(ctx, {
-                type: 'bar',
-                data: {
-                    labels: labels,
-                    datasets: [{
-                        data: dataValues,
-                        backgroundColor: 'yellow',
-                        borderColor: 'yellow',
-                        borderWidth: 1
-                    }]
-                },
-                options: {
-                    scales: {
-                        y: {
-                            beginAtZero: true,
-                            ticks: {
-                                stepSize: 1
+            function updateDayNightChart() {
+                var ctx = document.getElementById('myChart').getContext('2d');
+                
+                // Fetch and load the JSON data from your daynight.json file
+                fetch('./daynight.json')
+                    .then(response => response.json())
+                    .then(data => {
+                        // Initialize an object to store the totals for each lighting condition
+                        var lightingTotals = {};
+            
+                        // Loop through the data and calculate totals
+                        data.forEach(entry => {
+                            var lightingCondition = entry.LGT_COND;
+                            if (!lightingTotals[lightingCondition]) {
+                                lightingTotals[lightingCondition] = 1;
+                            } else {
+                                lightingTotals[lightingCondition]++;
                             }
-                        }
-                    }
-                }
-            });
-        })
-        .catch(error => console.error('Error loading JSON:', error));
-}
-
-// Call the function to initialize the chart
-updateDayNightChart();
+                        });
+            
+                        // Prepare data for chart
+                        var labels = Object.keys(lightingTotals).map(String);
+                        var dataValues = Object.values(lightingTotals);
+            
+                        // Define colors for the clusters
+                        var backgroundColors = labels.map(condition => {
+                            if (condition === '1') {
+                                return 'paleyellow'; 
+                            } else if (condition === '2') {
+                                return 'navy'; 
+                            }
+                        });
+            
+                        var myChart = new Chart(ctx, {
+                            type: 'bar',
+                            data: {
+                                labels: labels,
+                                datasets: [{
+                                    data: dataValues,
+                                    backgroundColor: backgroundColors,
+                                    borderColor: backgroundColors,
+                                    borderWidth: 1
+                                }]
+                            },
+                            options: {
+                                scales: {
+                                    y: {
+                                        beginAtZero: true,
+                                        ticks: {
+                                            stepSize: 1
+                                        }
+                                    }
+                                }
+                            }
+                        });
+                    })
+                    .catch(error => console.error('Error loading JSON:', error));
+            }
+            
+            // Call the function to initialize the chart
+            updateDayNightChart();
+})}
