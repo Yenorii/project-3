@@ -27,3 +27,10 @@ body {
     margin: 10px auto; 
     display: block;
 }
+
+#myChart, #PopBarChart {
+    height: 200px; 
+    max-width: 100%; 
+    margin: 10px auto; 
+    display: block;
+}

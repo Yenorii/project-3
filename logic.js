@@ -228,3 +228,65 @@ function updateYearlyChart() {
 
 // Call the function to initialize the chart
 updateYearlyChart();
+
+document.addEventListener('DOMContentLoaded', function () {
+    // Fetch data from JSON file
+    fetch('./data/population.json')
+        .then(response => response.json())
+        .then(jsonData => {
+            // Extract data for the chart
+            const labels = jsonData[0].rows.map(row => row[0]);
+            const dataCounts = countOccurrences(labels);
+
+            // Create a bar chart
+            createBarChart(labels, dataCounts);
+        })
+        .catch(error => console.error('Error loading JSON:', error));
+});
+
+function createBarChart(labels, dataCounts) {
+    // Get the canvas element
+    const ctx = document.getElementById('PopBarChart').getContext('2d');
+
+    // Define custom colors for bars
+    const customColors = [
+        'rgba(255, 99, 132, 0.2)',
+        'rgba(54, 162, 235, 0.2)',
+        'rgba(255, 206, 86, 0.2)',
+        'rgba(75, 192, 192, 0.2)',
+      
+    ];
+
+   
+    const PopBarChart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: Object.keys(dataCounts),
+            datasets: [{
+                label: 'Population Distribution',
+                data: Object.values(dataCounts),
+                backgroundColor: customColors,
+                borderColor: customColors.map(color => color.replace('0.2', '1')), // Adjust alpha for border
+                borderWidth: 1
+            }]
+        },
+        options: {
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    ticks: {
+                        stepSize: 1
+                    }
+                }
+            }
+        }
+    });
+}
+
+
+function countOccurrences(array) {
+    return array.reduce((acc, value) => {
+        acc[value] = (acc[value] || 0) + 1;
+        return acc;
+    }, {});
+}
