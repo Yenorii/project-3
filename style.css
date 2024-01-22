@@ -22,14 +22,14 @@ body {
 
 #myChart {
     height: 400px;
-    max-width: 600px;
+    max-width: 500px;
     margin: auto;
     display: block;
 }
 
 #yearlyChart {
     height: 400px;
-    max-width: 600px;
+    max-width: 500px;
     margin: auto;
     display: block;
 }
