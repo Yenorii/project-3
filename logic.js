@@ -29,7 +29,7 @@ function updateMap() {
         .then(response => response.json())
         .then(data => {
             data.forEach(coord => {
-                if (checkFilters(coord, selectedYear, selectedRegion, selectedRoadType, selectedPopulation, selectedLocation)) {
+                if (checkFilters(coord, selectedYear, selectedRegion, selectedPopulation, selectedLocation)) {
                     var marker = L.marker([coord.LATITUDE, coord.LONGITUDE]);
                     markers.addLayer(marker);
                 }
@@ -39,7 +39,7 @@ function updateMap() {
         .catch(error => console.error('Error loading JSON:', error));
 }
 
-function checkFilters(coord, selectedYear, selectedRegion, selectedRoadType, selectedPopulation, selectedLocation) {
+function checkFilters(coord, selectedYear, selectedRegion, selectedPopulation, selectedLocation) {
     var filterCriteria = [];
     if (selectedYear !== 'all') {
         filterCriteria.push(parseInt(coord.YEAR) === parseInt(selectedYear));
