@@ -11,8 +11,8 @@ fetch('./data/mapdata.json')
     .then(response => response.json())
     .then(data => {
         data.forEach(coord => {
-            if (coord.LATITUDE !== undefined && coord.LONGITUDE !== undefined) {
-                var marker = L.marker([coord.LATITUDE, coord.LONGITUDE]);
+            if (coord.LATITUDE !== undefined && coord.LONGITUD !== undefined) {
+                var marker = L.marker([coord.LATITUDE, coord.LONGITUD]);
                 markers.addLayer(marker);
             }
         });
@@ -32,7 +32,7 @@ function updateMap() {
         .then(data => {
             data.forEach(coord => {
                 if (checkFilters(coord, selectedYear, selectedRegion, selectedPopulation, selectedLocation)) {
-                    var marker = L.marker([coord.LATITUDE, coord.LONGITUDE]);
+                    var marker = L.marker([coord.LATITUDE, coord.LONGITUD]);
                     markers.addLayer(marker);
                 }
             });
