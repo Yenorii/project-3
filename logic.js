@@ -11,8 +11,10 @@ fetch('./data/mapdata.json')
     .then(response => response.json())
     .then(data => {
         data.forEach(coord => {
-            var marker = L.marker([coord.LATITUDE, coord.LONGITUDE]);
-            markers.addLayer(marker);
+            if (coord.LATITUDE !== undefined && coord.LONGITUD !== undefined) {
+                var marker = L.marker([coord.LATITUDE, coord.LONGITUD]);
+                markers.addLayer(marker);
+            }
         });
         map.addLayer(markers);
     })
