@@ -40,7 +40,7 @@ function updateMap() {
         .catch(error => console.error('Error loading JSON:', error));
 }
 
-function checkFilters(coord, selectedYear, selectedRegion, selectedRoadType, selectedPopulation, selectedLocation) {
+function checkFilters(coord, selectedYear, selectedRegion, selectedPopulation, selectedLocation) {
     var filterCriteria = [];
     if (selectedYear !== 'all') {
         filterCriteria.push(parseInt(coord.YEAR) === parseInt(selectedYear));
