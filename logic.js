@@ -22,12 +22,14 @@ fetch('./data/mapdata.json')
 function updateMap() {
     var selectedYear = document.getElementById('yearFilter').value;
     var selectedRegion = document.getElementById('regionFilter').value;
+    var selectedPopulation = document.getElementById('PopulationFilter').value;
+    var selectedLocation = document.getElementById('LocationFilter').value;
     markers.clearLayers();
     fetch('./data/mapdata.json')
         .then(response => response.json())
         .then(data => {
             data.forEach(coord => {
-                if (checkFilters(coord, selectedYear, selectedRegion)) {
+                if (checkFilters(coord, selectedYear, selectedRegion, selectedPopulation,selectedLocation)) {
                     var marker = L.marker([coord.LATITUDE, coord.LONGITUD]);
                     markers.addLayer(marker);
                 }
@@ -36,10 +38,16 @@ function updateMap() {
         })
         .catch(error => console.error('Error loading JSON:', error));
 }
-function checkFilters(coord, selectedYear, selectedRegion) {
+function checkFilters(coord, selectedYear, selectedRegion, selectedPopulation, selectedLocation) {
     var filterCriteria = [];
     if (selectedYear !== 'all') {
         filterCriteria.push(parseInt(coord.YEAR) === parseInt(selectedYear));
+    }
+    if (selectedPopulation !== 'all') {
+        filterCriteria.push(coord.POPULATION === selectedPopulation);
+    }
+    if (selectedLocation !== 'all') {
+        filterCriteria.push(coord.LOCATION === selectedLocation);
     }
     if (selectedRegion !== 'all') {
         filterCriteria.push(coord.REGION === selectedRegion);
@@ -54,3 +62,5 @@ updateMap();
 // Event listeners
 document.getElementById('yearFilter').addEventListener('change', updateMap);
 document.getElementById('regionFilter').addEventListener('change', updateMap);
+document.getElementById('PopulationFilter').addEventListener('change', updateMap);
+document.getElementById('LocationFilter').addEventListener('change', updateMap);
