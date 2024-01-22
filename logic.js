@@ -75,7 +75,7 @@ function updateDayNightChart() {
     var ctx = document.getElementById('myChart').getContext('2d');
     
     // Fetch and load the JSON data from your daynight.json file
-    fetch('./daynight.json')
+    fetch('./data/daynight.json')
         .then(response => response.json())
         .then(data => {
             // Initialize an object to store the totals for each lighting condition
