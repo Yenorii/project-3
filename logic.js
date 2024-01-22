@@ -41,18 +41,28 @@ function updateMap() {
 
 function checkFilters(coord, selectedYear, selectedRegion, selectedPopulation, selectedLocation) {
     var filterCriteria = [];
+
+    console.log("Year Data:", coord.YEAR, "Selected Year:", selectedYear);
     if (selectedYear !== 'all') {
         filterCriteria.push(parseInt(coord.YEAR) === parseInt(selectedYear));
     }
+
+    console.log("Population Data:", coord.POPULATION, "Selected Population:", selectedPopulation);
     if (selectedPopulation !== 'all') {
         filterCriteria.push(coord.POPULATION === selectedPopulation);
     }
+
+    console.log("Location Data:", coord.LOCATION, "Selected Location:", selectedLocation);
     if (selectedLocation !== 'all') {
         filterCriteria.push(coord.LOCATION === selectedLocation);
     }
+
+    console.log("Region Data:", coord.REGION, "Selected Region:", selectedRegion);
     if (selectedRegion !== 'all') {
         filterCriteria.push(coord.REGION === selectedRegion);
     }
+
+    console.log("Current Filter Criteria:", filterCriteria);
     if (filterCriteria.length > 0) {
         return filterCriteria.every(condition => condition);
     }
