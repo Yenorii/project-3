@@ -30,7 +30,7 @@ function updateMap() {
         .then(response => response.json())
         .then(data => {
             data.forEach(coord => {
-                if (checkFilters(coord, selectedYear, selectedRegion, selectedRoadType, selectedPopulation, selectedLocation)) {
+                if (checkFilters(coord, selectedYear, selectedRegion, selectedPopulation, selectedLocation)) {
                     var marker = L.marker([coord.LATITUDE, coord.LONGITUDE]);
                     markers.addLayer(marker);
                 }
