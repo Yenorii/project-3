@@ -67,7 +67,7 @@ updateMap();
 // Create a function to update the day/night chart
 function updateDayNightChart() {
     var ctx = document.getElementById('myChart').getContext('2d');
-    
+
     // Fetch and load the JSON data from daynight.json file
     fetch('./data/daynight.json')
         .then(response => response.json())
@@ -104,7 +104,7 @@ function updateDayNightChart() {
                     labels: labels,
                     datasets: [{
                         data: dataValues,
-                        backgroundColor: backgroundColors, // Set colors based on lighting condition
+                        backgroundColor: backgroundColors,
                         borderColor: backgroundColors,
                         borderWidth: 1
                     }]
@@ -115,9 +115,28 @@ function updateDayNightChart() {
                             beginAtZero: true,
                             ticks: {
                                 stepSize: 1
-                            }
+                            },
                         }
-                    }
+                    },
+                    plugins: {
+                        legend: {
+                            display: true, // Set to true to display the legend
+                            position: 'top', // You can change the position if needed
+                            labels: {
+                                generateLabels: function (chart) {
+                                    return [{
+                                        text: 'Daylight/Lit Conditions',
+                                        fillStyle: 'blue', // Match the color used for daytime
+                                        hidden: false, // Set to false to show this label
+                                    }, {
+                                        text: 'Night/Dark Conditions',
+                                        fillStyle: 'black', // Match the color used for nighttime
+                                        hidden: false, // Set to false to show this label
+                                    }];
+                                },
+                            },
+                        },
+                    },
                 }
             });
         })
@@ -134,17 +153,16 @@ const jsonData = [
     { YEAR: 2019 },
     { YEAR: 2021 },
     { YEAR: 2020 },
-    // ... more data
-  ];
-  
-  // Count occurrences of each year (total accidents per year)
-  const yearCounts = jsonData.reduce((counts, entry) => {
+];
+
+// Count occurrences of each year (total accidents per year)
+const yearCounts = jsonData.reduce((counts, entry) => {
     const year = entry.YEAR.toString(); // Convert to string
     counts[year] = (counts[year] || 0) + 1;
     return counts;
-  }, {});
-  
-  console.log(yearCounts);
+}, {});
+
+console.log(yearCounts);
 
 // Function to create or update the yearly accidents chart
 function updateYearlyChart() {
@@ -196,7 +214,7 @@ function updateYearlyChart() {
                                 stepSize: 1000 // Adjust as needed
                             }
                         }
-                    }
+                    },
                 }
             });
         })
