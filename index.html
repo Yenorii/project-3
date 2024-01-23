@@ -16,8 +16,10 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
-<!-- Map -->
+
+    <!-- Map -->
 <div id="map"></div>
+
 <!-- Year Filter -->
 <select id="yearFilter">
     <option value="all">All Years</option>
@@ -25,6 +27,7 @@
     <option value="2020">2020</option>
     <option value="2019">2019</option>
 </select>
+
 <!-- Region Filter -->
 <select id="regionFilter">
         <option value="all">All Regions</option>
@@ -33,6 +36,7 @@
         <option value="Northeast">Northeast</option>
         <option value="South">South</option>
 </select>
+
 <!-- Population Filter -->
 <select id="PopulationFilter">
     <option value="All">All Population</option>
@@ -42,6 +46,7 @@
     <option value="Not Reported">Trafficway Not in State Inventory</option>
     <option value="Trafficway Not in State Inventory">Trafficway Not in State Inventory</option>
 </select>
+
 <!-- Location Filter -->
 <select id="LocationFilter">
     <option value="all">All Location </option>
@@ -69,7 +74,7 @@
 
 <!-- Population Bar Chart -->
 <canvas id="PopBarChart"></canvas>
-<script src="logic.js"></script>
+<script src="./logic.js"></script>
 
 </body>
 
